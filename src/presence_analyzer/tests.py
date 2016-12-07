@@ -86,6 +86,93 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             datetime.time(9, 39, 5)
         )
 
+    def test_group_by_weekday(self):
+        """
+        Test group_by_weekday
+        """
+        testData = {
+            'testUser1': {
+                datetime.date(2013, 1, 1): {
+                    'start': datetime.time(6, 0, 0),
+                    'end': datetime.time(17, 00, 0),
+                },
+                datetime.date(2013, 10, 2): {
+                    'start': datetime.time(8, 30, 0),
+                    'end': datetime.time(16, 00, 0),
+                }
+            },
+            'testUser2': {
+                datetime.date(2013, 9, 22): {
+                    'start': datetime.time(9, 0, 0),
+                    'end': datetime.time(17, 30, 0),
+                },
+                datetime.date(2013, 9, 26): {
+                    'start': datetime.time(8, 30, 0),
+                    'end': datetime.time(16, 30, 0),
+                },
+                datetime.date(2012, 9, 26): {
+                    'start': datetime.time(8, 30, 0),
+                    'end': datetime.time(16, 30, 0),
+                }
+            },
+            'testUser3': {}
+        }
+
+        testResult = utils.group_by_weekday(testData['testUser1'])
+        testResult2 = utils.group_by_weekday(testData['testUser2'])
+        testResult3 = utils.group_by_weekday(testData['testUser3'])
+
+        self.assertListEqual(
+            testResult, [[], [39600], [27000], [], [], [], []]
+        )
+        self.assertListEqual(
+            testResult2, [[], [], [28800], [28800], [], [], [30600]]
+        )
+        self.assertListEqual(
+            testResult3, [[], [], [], [], [], [], []]
+        )
+
+    def test_seconds_since_midnight(self):
+        """
+        Test second_since_midnight
+        """
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(1, 0, 0)), 3600
+        )
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(1, 2, 3)), 3723
+        )
+        self.assertEqual(
+            utils.seconds_since_midnight(datetime.time(0, 0, 0)), 0
+        )
+
+    def test_interval(self):
+        """
+        Test interval
+        """
+        self.assertEqual(
+            utils.interval(datetime.time(12, 0, 20), datetime.time(13, 0, 20)),
+            3600,
+        )
+        self.assertEqual(
+            utils.interval(datetime.time(0, 0, 0), datetime.time(0, 0, 0)),
+            0,
+        )
+
+    def test_mean(self):
+        """
+        Test second_since_midnight
+        """
+        self.assertAlmostEqual(
+            utils.mean([12, 4, 1222, 1, 55, 23, 423, 1]), 217.625
+        )
+        self.assertEqual(
+            utils.mean([]), 0
+        )
+        self.assertAlmostEqual(
+            utils.mean([12, 2, 1, 5, 1]), 4.2
+        )
+
 
 def suite():
     """
