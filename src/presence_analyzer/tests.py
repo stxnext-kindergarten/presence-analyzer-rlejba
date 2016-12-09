@@ -173,6 +173,49 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             utils.mean([12, 2, 1, 5, 1]), 4.2
         )
 
+    def test_group_by_start_end(self):
+        """
+        Test group_by_start_end
+        """
+        testResult = utils.group_by_start_end(utils.get_data()[10])
+        testResult2 = utils.group_by_start_end(utils.get_data()[11])
+        testResult3 = utils.group_by_start_end([])
+
+        self.assertListEqual(
+            testResult, [
+                [[], []],
+                [[34745], [64792]],
+                [[33592], [58057]],
+                [[38926], [62631]],
+                [[], []],
+                [[], []],
+                [[], []]
+            ]
+
+        )
+        self.assertListEqual(
+            testResult2, [
+                [[33134], [57257]],
+                [[33590], [50154]],
+                [[33206], [58527]],
+                [[37116, 34088], [60085, 57087]],
+                [[47816], [54242]],
+                [[], []],
+                [[], []],
+            ]
+        )
+        self.assertListEqual(
+            testResult3, [
+                [[], []],
+                [[], []],
+                [[], []],
+                [[], []],
+                [[], []],
+                [[], []],
+                [[], []]
+            ]
+        )
+
 
 def suite():
     """
