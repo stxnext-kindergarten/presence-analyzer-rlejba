@@ -88,7 +88,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_group_by_weekday(self):
         """
-        Test group_by_weekday
+        Test group_by_weekday.
         """
         testData = {
             'testUser1': {
@@ -134,7 +134,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_seconds_since_midnight(self):
         """
-        Test second_since_midnight
+        Test second_since_midnight.
         """
         self.assertEqual(
             utils.seconds_since_midnight(datetime.time(1, 0, 0)), 3600
@@ -148,7 +148,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_interval(self):
         """
-        Test interval
+        Test interval.
         """
         self.assertEqual(
             utils.interval(datetime.time(12, 0, 20), datetime.time(13, 0, 20)),
@@ -161,7 +161,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_mean(self):
         """
-        Test second_since_midnight
+        Test second_since_midnight.
         """
         self.assertAlmostEqual(
             utils.mean([12, 4, 1222, 1, 55, 23, 423, 1]), 217.625
@@ -175,7 +175,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
 
     def test_group_by_start_end(self):
         """
-        Test group_by_start_end
+        Test group_by_start_end.
         """
         testResult = utils.group_by_start_end(utils.get_data()[10])
         testResult2 = utils.group_by_start_end(utils.get_data()[11])
