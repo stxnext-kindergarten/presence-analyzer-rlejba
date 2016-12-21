@@ -8,10 +8,10 @@
     <meta name="description" content=""/>
     <meta name="author" content="STX Next sp. z o.o."/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{ url_for('static', filename='css/normalize.css') }}" media="all" rel="stylesheet" type="text/css" />
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel=stylesheet type=text/css>
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    {% block script %}{% endblock %}
+    <link href="${ url_for('static', filename='css/normalize.css') }" media="all" rel="stylesheet" type="text/css" />
+    <link href="${ url_for('static', filename='css/style.css') }" rel=stylesheet type=text/css>
+    <script src="${ url_for('static', filename='js/jquery.min.js') }"></script>
+    <%block name="script"></%block>
 </head>
 
 <body>
@@ -20,22 +20,26 @@
             <h1>Presence analyzer</h1>
             <!--!NAVIGATION BAR!-->
             <!--(file name, Name in nav bar)-->
-            {% set navigation_bar = [
-                ('mean_time_weekday.html', 'Presence by mean'),
-                ('presence_start_end.html', 'Presence by start-end'),
-                ('presence_weekday.html', 'Presence by weekday')
-            ] %}
-            {% set active_page = active_page|default('presence_start_end.html') %}
+            <%
+                items = [
+                    ('mean_time_weekday.html', 'Presence by mean'),
+                    ('presence_start_end.html', 'Presence by start-end'),
+                    ('presence_weekday.html', 'Presence by weekday')
+                ] 
+            %>
             <ul id="navigation">
-                {% for id, caption in navigation_bar %}
-                  <li{% if id == active_page %} id="selected"{% endif
-                  %}><a href="{{id|e}}">{{ caption|e }}</a></li>
-                {% endfor %}
+                % for id, caption in items:
+                    % if id==self.attr.active_page:
+                        <li id="selected"><a href="${id}">${caption}</a></li>
+                    % else:
+                        <li><a href="${id}">${caption}</a></li>
+                    % endif
+                % endfor
             </ul>
             <!--============================-->
         </div>
         <div id="content">
-            {% block header %}{% endblock %}
+        <%block name="header"></%block>
         <p>
             <select id="user_id" style="display: none">
                 <option value="">--</option>
@@ -43,7 +47,7 @@
             <div id="chart_div" style="display: none">
             </div>
             <div id="loading">
-                <img src="{{ url_for('static', filename='img/loading.gif') }}" />
+                <img src="${ url_for('static', filename='img/loading.gif') }" />
             </div>
         </p>
         </div>

@@ -4,7 +4,9 @@ Defines views.
 """
 
 import calendar
-from flask import redirect, abort, render_template, url_for
+from flask import redirect, abort, url_for
+from flask.ext.mako import render_template
+from mako.exceptions import TopLevelLookupException
 
 from presence_analyzer.main import app
 from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
@@ -27,7 +29,10 @@ def pages(page):
     """
     Renders templates.
     """
-    return render_template(page, page=page)
+    try:
+        return render_template(page, page=page)
+    except TopLevelLookupException:
+        return render_template('404.html')
 
 
 @app.route('/api/v1/users', methods=['GET'])
