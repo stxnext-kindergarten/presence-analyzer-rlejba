@@ -1,13 +1,13 @@
-{% extends "base.html" %}
-{% set active_page = "presence_start_end.html" %}
-{% block script %}
-    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+<%inherit file="base.html"/>
+<%!active_page = 'presence_start_end.html'%>
+<%block name="script">
+    <script src="${ url_for('static', filename='js/utils.js') }"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
         google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
     </script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/presence_start_end.js') }}"></script>
-{% endblock %}
-{% block header %}
-<h2>Presence sorted by mean start/end hours</h2>
-{% endblock %}
+    <script type="text/javascript" src="${ url_for('static', filename='js/presence_start_end.js') }"></script>
+</%block>
+<%block name="header">
+	<h2>Presence sorted by mean start/end hours</h2>
+</%block>
