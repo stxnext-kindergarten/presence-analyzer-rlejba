@@ -6,6 +6,7 @@ import os
 import sys
 from functools import partial
 
+from lxml import etree
 import paste.script.command
 import werkzeug.script
 
@@ -111,3 +112,15 @@ def run():
         _serve('stop', dry_run=dry_run)
 
     werkzeug.script.run()
+
+
+def update_xml():
+    """
+    Updates users.xml file
+    """
+    app = make_app()
+    newdata = etree.parse(app.config['XML_URL'])
+    oldfile = app.config['DATA_XML']
+    with open(oldfile, 'w') as xmlfile:
+        newdata.write(xmlfile, encoding='UTF-8')
+    print('XML FILE UP TO DATE')

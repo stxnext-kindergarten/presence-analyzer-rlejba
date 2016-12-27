@@ -10,7 +10,7 @@ from mako.exceptions import TopLevelLookupException
 
 from presence_analyzer.main import app
 from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
-from presence_analyzer.utils import group_by_start_end
+from presence_analyzer.utils import group_by_start_end, get_xml_data
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -41,11 +41,21 @@ def users_view():
     """
     Users listing for dropdown.
     """
-    data = get_data()
+    data = get_xml_data()
     return [
-        {'user_id': i, 'name': 'User {0}'.format(str(i))}
-        for i in data.keys()
+        {'user_id': key, 'name': value['user_name']}
+        for key, value in data.iteritems()
     ]
+
+
+@app.route('/api/v1/users/<int:user_id>', methods=['GET'])
+@jsonify
+def avatar_view(user_id):
+    """
+    Returns adress of user avatar.
+    """
+    data = get_xml_data()
+    return data[str(user_id)]['avatar']
 
 
 @app.route('/api/v1/mean_time_weekday/<int:user_id>', methods=['GET'])
