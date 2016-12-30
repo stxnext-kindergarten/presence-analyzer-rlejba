@@ -8,6 +8,7 @@ from json import dumps
 from functools import wraps
 from datetime import datetime
 
+from lxml import etree
 from flask import Response
 
 from presence_analyzer.main import app
@@ -119,3 +120,32 @@ def group_by_start_end(items):
             seconds_since_midnight(end)
         )
     return result
+
+
+def get_xml_data():
+    """
+    Gets data from xml file and groups it like this:
+    {
+        user_id : {'user_name': user_name, 'avatar': user_avatar_source}
+    }
+    """
+    xml_data = {}
+    with open(app.config['DATA_XML'], 'r') as xmlfile:
+        tree = etree.parse(xmlfile)
+        server = tree.find('server')
+        server_data = '{}://{}'.format(
+            server.find('protocol').text,
+            server.find('host').text
+        )
+
+        users = tree.find('users')
+        users = users.findall('user')
+
+        for user in users:
+            user_id = user.get('id')
+            user_name = user.find('name').text
+            user_avatar = user.find('avatar').text
+            avatar = '{}{}'.format(server_data, user_avatar)
+            xml_data[user_id] = {'user_name': user_name, 'avatar': avatar}
+
+    return xml_data

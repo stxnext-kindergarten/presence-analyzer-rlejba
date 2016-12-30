@@ -2,11 +2,13 @@ body {
     font-family: latoregular, Helvetica, Arial;
     background-color: #EEE;
 }
+
 #main {
     width: 800px;
     margin: 2em auto;
     padding: 0 2em;
 }
+
 #content {
     padding: 0 2em;
     border: 1px solid #AAA;
@@ -16,9 +18,15 @@ body {
     clear: both;
     padding: 0 1em;
 }
-#chart_div {
+
+#chart-div {
     width: 750px;
     height: 750px;
+}
+
+#avatar-div {
+    width: 100px;
+    height: 100px;
 }
 
 #header ul {

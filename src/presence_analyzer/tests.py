@@ -2,6 +2,8 @@
 """
 Presence analyzer unit tests.
 """
+from __future__ import unicode_literals
+
 import os.path
 import json
 import datetime
@@ -12,6 +14,10 @@ from presence_analyzer import main, views, utils
 
 TEST_DATA_CSV = os.path.join(
     os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_data.csv'
+)
+
+TEST_DATA_XML = os.path.join(
+    os.path.dirname(__file__), '..', '..', 'runtime', 'data', 'test_users.xml'
 )
 
 
@@ -26,6 +32,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({'DATA_XML': TEST_DATA_XML})
         self.client = main.app.test_client()
 
     def tearDown(self):
@@ -40,7 +47,7 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         """
         resp = self.client.get('/')
         self.assertEqual(resp.status_code, 302)
-        assert resp.headers['Location'].endswith('/presence_weekday.html')
+        assert resp.headers['Location'].endswith('/presence_start_end.html')
 
     def test_api_users(self):
         """
@@ -50,8 +57,10 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(len(data), 2)
-        self.assertDictEqual(data[0], {u'user_id': 10, u'name': u'User 10'})
+        self.assertEqual(len(data), 4)
+        self.assertDictEqual(
+            data[0], {'user_id': '176', 'name': 'Adrian K.'}
+        )
 
 
 class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
@@ -64,6 +73,7 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         Before each test, set up a environment.
         """
         main.app.config.update({'DATA_CSV': TEST_DATA_CSV})
+        main.app.config.update({'DATA_XML': TEST_DATA_XML})
 
     def tearDown(self):
         """
@@ -214,6 +224,26 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
                 [[], []],
                 [[], []]
             ]
+        )
+
+    def test_get_xml_data(self):
+        """
+        Test get_xml_data
+        """
+        testData = utils.get_xml_data()
+
+        self.assertDictEqual(
+            testData['141'], {
+                'user_name': 'Adam P.',
+                'avatar': 'https://intranet.stxnext.pl/api/images/users/141'
+            }
+        )
+
+        self.assertDictEqual(
+            testData['176'], {
+                'user_name': 'Adrian K.',
+                'avatar': 'https://intranet.stxnext.pl/api/images/users/176'
+            }
         )
 
 
