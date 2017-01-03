@@ -7,6 +7,7 @@ import csv
 from json import dumps
 from functools import wraps
 from datetime import datetime
+from threading import Lock
 
 from lxml import etree
 from flask import Response
@@ -15,6 +16,8 @@ from presence_analyzer.main import app
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
+
+Cache = {}  # Container for cache decorator.
 
 
 def jsonify(function):
@@ -33,6 +36,33 @@ def jsonify(function):
     return inner
 
 
+def cache(time):
+    """
+    Stores function data in Cache container.
+    """
+    lock = Lock()
+    current_time = datetime.now()
+
+    def wrapper(function):
+        name = function.__name__
+
+        @wraps(function)
+        def inner(*args, **kwargs):
+            with lock:
+                if (name not in Cache or
+                    (current_time - Cache[name]['Time']).total_seconds() >
+                        time):
+                    Cache[name] = {
+                        'Time': current_time,
+                        'Data': function()
+                    }
+
+            return Cache[name]['Data']
+        return inner
+    return wrapper
+
+
+@cache(600)
 def get_data():
     """
     Extracts presence data from CSV file and groups it by user_id.
