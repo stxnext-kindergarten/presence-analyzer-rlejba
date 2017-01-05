@@ -153,6 +153,40 @@ def group_by_start_end(items):
     return result
 
 
+def group_by_months(items):
+    """
+    Groups given items by each month from the start of work.
+
+    It creates something like this:
+    result = {
+        '2013.9': 242211
+        '2013.10: 77634
+    }
+    """
+    result = {}
+    for date in items:
+        start = items[date]['start']
+        end = items[date]['end']
+        time = interval(start, end)
+        if date.month < 10:
+            key = '{}.0{}'.format(
+                str(date.year),
+                str(date.month)
+            )
+        else:
+            key = '{}.{}'.format(
+                str(date.year),
+                str(date.month)
+            )
+
+        if key in result:
+            result[key] += time
+        else:
+            result[key] = time
+
+    return result
+
+
 def get_xml_data():
     """
     Gets data from xml file and groups it like this:
