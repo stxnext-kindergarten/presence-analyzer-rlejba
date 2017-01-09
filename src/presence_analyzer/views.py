@@ -19,6 +19,7 @@ from presence_analyzer.utils import (
     group_by_months
 )
 
+import locale
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -48,11 +49,18 @@ def users_view():
     """
     Users listing for dropdown.
     """
+    locale.setlocale(locale.LC_COLLATE, 'pl_PL.UTF-8')
     data = get_xml_data()
-    return [
+    data = [
         {'user_id': key, 'name': value['user_name']}
         for key, value in data.iteritems()
     ]
+    sorted_data = sorted(
+        data,
+        key=lambda x: x['name'],
+        cmp=locale.strcoll,
+    )
+    return sorted_data
 
 
 @app.route('/api/v1/users/<int:user_id>', methods=['GET'])
