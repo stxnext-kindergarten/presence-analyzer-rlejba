@@ -29,10 +29,12 @@ google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
                 $chart_div.hide();
                 $avatar.hide();
 
-                $.getJSON("/api/v1/presence_weekday/"+selected_user, function(result) {
-                    var chart = new google.visualization.PieChart($chart_div[0]),
+                $.getJSON("/api/v1/monthly_presence/"+selected_user, function(result) {
+                    var chart = new google.visualization.LineChart($chart_div[0]),
                         data = google.visualization.arrayToDataTable(result),
-                        options = {};
+                        options = {
+                            curveType: 'function',
+                        };
 
                     $chart_div.show();
                     $loading.hide();
@@ -42,7 +44,7 @@ google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
                         $avatar.attr("src", result).show();
                     });
                 });
-            }
+            }    
         });
     });
 })(jQuery);

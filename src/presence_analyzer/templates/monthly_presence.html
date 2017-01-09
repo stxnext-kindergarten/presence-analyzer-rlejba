@@ -1,0 +1,13 @@
+<%inherit file="base.html"/>
+<%!active_page = 'monthly_presence.html'%>
+<%block name="script">
+    <script src="${ url_for('static', filename='js/utils.js') }"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
+    </script>
+    <script type="text/javascript" src="${ url_for('static', filename='js/monthly_presence.js') }"></script>
+</%block>
+<%block name="header">
+	<h2>Presence sorted by each month from the start of work.</h2>
+</%block>

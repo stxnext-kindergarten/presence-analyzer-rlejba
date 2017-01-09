@@ -54,9 +54,7 @@
                     chart.draw(data, options);
                 });
                 $.getJSON("/api/v1/users/"+selected_user, function(result) {
-
                     $avatar.attr("src", result).show();
-
                 });
             }    
         });

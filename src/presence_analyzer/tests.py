@@ -226,9 +226,27 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
             ]
         )
 
+    def test_group_by_month(self):
+        """
+        Test group_by_month.
+        """
+        testData1 = utils.group_by_months(utils.get_data()[11])
+        testData2 = utils.group_by_months(utils.get_data()[10])
+
+        self.assertDictEqual(
+            testData1, {
+                '2013.09': 118402
+            }
+        )
+        self.assertDictEqual(
+            testData2, {
+                '2013.09': 78217
+            }
+        )
+
     def test_get_xml_data(self):
         """
-        Test get_xml_data
+        Test get_xml_data.
         """
         testData = utils.get_xml_data()
 
