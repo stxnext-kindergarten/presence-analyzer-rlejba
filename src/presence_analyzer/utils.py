@@ -195,6 +195,7 @@ def get_xml_data():
     }
     """
     xml_data = {}
+
     with open(app.config['DATA_XML'], 'r') as xmlfile:
         tree = etree.parse(xmlfile)
         server = tree.find('server')

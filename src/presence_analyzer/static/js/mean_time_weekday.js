@@ -29,25 +29,30 @@
                 $avatar.hide();
 
                 $.getJSON("/api/v1/mean_time_weekday/"+selected_user, function(result) {
-                    var chart = new google.visualization.ColumnChart($chart_div[0]),
-                        data = new google.visualization.DataTable(),
-                        formatter = new google.visualization.DateFormat({pattern: 'HH:mm:ss'});
+                    if (result!=0){
+                        var chart = new google.visualization.ColumnChart($chart_div[0]),
+                            data = new google.visualization.DataTable(),
+                            formatter = new google.visualization.DateFormat({pattern: 'HH:mm:ss'});
 
-                    $.each(result, function(index, value) {
-                        value[1] = parseInterval(value[1]);
-                    });
+                        $.each(result, function(index, value) {
+                            value[1] = parseInterval(value[1]);
+                        });
 
-                    data.addColumn('string', 'Weekday');
-                    data.addColumn('datetime', 'Mean time (h:m:s)');
-                    data.addRows(result);
-                    var options = {
-                        hAxis: {title: 'Weekday'}
-                    };
+                        data.addColumn('string', 'Weekday');
+                        data.addColumn('datetime', 'Mean time (h:m:s)');
+                        data.addRows(result);
+                        var options = {
+                            hAxis: {title: 'Weekday'}
+                        };
 
-                    formatter.format(data, 1);
-                    $chart_div.show();
+                        formatter.format(data, 1);
+                        $chart_div.show();
+                        chart.draw(data, options);
+                    }else{
+                        $chart_div.show();
+                        $chart_div.text("No data for this user.");
+                    }
                     $loading.hide();
-                    chart.draw(data, options);
 
                     $.getJSON("/api/v1/users/"+selected_user, function(result) {
                         $avatar.attr("src", result).show();
