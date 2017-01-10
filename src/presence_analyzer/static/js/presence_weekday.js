@@ -30,13 +30,18 @@ google.load("visualization", "1", {packages:["corechart"], 'language': 'en'});
                 $avatar.hide();
 
                 $.getJSON("/api/v1/presence_weekday/"+selected_user, function(result) {
-                    var chart = new google.visualization.PieChart($chart_div[0]),
-                        data = google.visualization.arrayToDataTable(result),
-                        options = {};
+                    if (result!=0){
+                        var chart = new google.visualization.PieChart($chart_div[0]),
+                            data = google.visualization.arrayToDataTable(result),
+                            options = {};
 
-                    $chart_div.show();
+                        $chart_div.show();
+                        chart.draw(data, options);
+                    }else{
+                        $chart_div.show();
+                        $chart_div.text("No data for this user.");
+                    }
                     $loading.hide();
-                    chart.draw(data, options);
 
                     $.getJSON("/api/v1/users/"+selected_user, function(result) {
                         $avatar.attr("src", result).show();

@@ -81,8 +81,7 @@ def mean_time_weekday_view(user_id):
     """
     data = get_data()
     if user_id not in data:
-        log.debug('User %s not found!', user_id)
-        abort(404)
+        return 0
 
     weekdays = group_by_weekday(data[user_id])
     result = [
@@ -101,8 +100,7 @@ def presence_weekday_view(user_id):
     """
     data = get_data()
     if user_id not in data:
-        log.debug('User %s not found!', user_id)
-        abort(404)
+        return 0
 
     weekdays = group_by_weekday(data[user_id])
     result = [
@@ -123,8 +121,7 @@ def presence_start_end_view(user_id):
     """
     data = get_data()
     if user_id not in data:
-        log.debug('User %s not found!', user_id)
-        abort(404)
+        return 0
 
     weekdays = group_by_start_end(data[user_id])
     result = [
@@ -149,8 +146,7 @@ def monthly_presence_view(user_id):
     """
     data = get_data()
     if user_id not in data:
-        log.debug('User %s not found!', user_id)
-        abort(404)
+        return 0
 
     months = group_by_months(data[user_id])
     result = [
